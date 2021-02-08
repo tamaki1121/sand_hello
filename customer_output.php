@@ -28,12 +28,12 @@
 			$stmt->bindValue(':password', $pass, PDO::PARAM_STR);
 			$result = $stmt->execute();
 			if ($result === true) {
-				print("登録に成功しました" . "<br/>");
+				print("登録に成功しました<br/>");
 			} else {
-				print("登録に失敗しました" . "<br/>");
+				print("登録に失敗しました<br/>");
 			}
 		} catch (Exception $e) {
-			print("error" . "<br/>");
+			print("error<br/>");
 			print $e->getMessage() . "<br/>";
 			exit();
 		}
