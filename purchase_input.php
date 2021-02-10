@@ -20,7 +20,7 @@
 		);
 		require 'cart.php';
 		if (!empty($_SESSION['product'])) {
-			$_SESSION['token'] = random_int(1, 1000000); ?>
+			$_SESSION['token'] = random_int(1, 1000000000); ?>
 			<form id="buy" action="purchase_output.php" method="POST">
 				<input type="text" name="token" value="<?= $_SESSION['token'] ?>">
 				<input type="submit" value="購入を確定する"><br />

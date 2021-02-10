@@ -11,25 +11,28 @@
 <body>
 	<?php require 'menu.php'; ?>
 	<?php
-	$pdo;
-	require 'db_connect.php';
-	?>
-	<?php
 	if (!empty($_SESSION['customer']) && !empty($_SESSION['product'])) {
 		if (isset($_POST['token']) && !empty($_SESSION['token'])) {
 			if ($_POST['token'] == $_SESSION['token']) {
 				$_SESSION['token'] = NULL;
-				echo "処理をします";
+				$id = $_SESSION['customer']['id'];
+				$pdo;
+				require 'db_connect.php';
+				$sql = "INSERT INTO purchase(customer_id) VALUE(:customer_id); SELECT LAST_INSERT_ID();";
+				$stm = $pdo->prepare($sql);
+				$stm->bindValue(':customer_id', $id, PDO::PARAM_INT);
+				$result = $stm->execute();
+				var_dump($result);
 			} else {
-				echo $_SESSION['token'] . "不正なトークンです";
-				echo $_POST['token'] . "購入ページからアクセスしてください。<br/>";
+				echo "不正なトークンです";
+				echo "購入ページからアクセスしてください。<br/>";
 			}
 		} else {
 			echo "購入ページからアクセスしてください。<br/>";
 		}
 	} else {
 		if (empty($_SESSION['customer'])) echo "ログインしてください。<br/>";
-		if (empty($_SESSION['product'])) echo "ログインしてください。<br/>";
+		if (empty($_SESSION['product'])) echo "カートに所品がありません<br/>";
 	} ?>
 
 </body>
