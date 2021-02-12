@@ -16,7 +16,7 @@
 		$pdo;
 		require 'db_connect.php';
 		$sql = "
-			SELECT purchase_id, name, count, price
+			SELECT purchase_id, name, count, price, product_id
 			FROM purchase AS P
 				INNER JOIN purchase_detail AS D
 					ON P.id = D.purchase_id
@@ -34,6 +34,7 @@
 			foreach ($stm as $row) {
 				$array[$row['purchase_id']][] = [
 					'name' => $row['name'],
+					'product_id' => $row['product_id'],
 					'count' => $row['count'],
 					'price' => $row['price'],
 					'subtotal' => $row['price'] * $row['count'],
@@ -54,9 +55,13 @@
 				</tr>
 				<?php foreach ($val as $listVal) : ?>
 					<tr>
-						<?php foreach ($listVal as $itemVal) : ?>
-							<td><?= $itemVal ?></td>
-						<?php endforeach; ?>
+						<td>
+							<a href="detail.php?id=<?= $listVal['product_id'] ?>">
+								<?= $listVal['name'] ?></a>
+						</td>
+						<td><?= $listVal['count'] ?></td>
+						<td><?= $listVal['price'] ?></td>
+						<td><?= $listVal['subtotal'] ?></td>
 					</tr>
 				<?php $total += $listVal['subtotal'];
 				endforeach; ?>

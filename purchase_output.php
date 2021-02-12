@@ -12,6 +12,7 @@
 	<?php require 'menu.php'; ?>
 	<?php
 	if (empty($_SESSION['customer']) || empty($_SESSION['product'])) {
+
 		if (empty($_SESSION['customer'])) echo "ログインしてください。<br/>";
 		if (empty($_SESSION['product'])) echo "カートに所品がありません<br/>";
 	} elseif (!isset($_POST['token']) || empty($_SESSION['token'])) {
@@ -29,14 +30,19 @@
 		foreach ($pdo->query("SELECT max(id) FROM purchase;") as $row) {
 			$maxId = $row['max(id)'] + 1;
 		}
-		$purchaseSql =  'INSERT INTO purchase(id, customer_id) VALUES(:id, :customer_id);';
+
+		$purchaseSql =  
+		'INSERT INTO purchase(id, customer_id) VALUES(:id, :customer_id);';
 		$purchaseStm = $pdo->prepare($purchaseSql);
+
 		$purchaseStm->bindValue(':id', $maxId, PDO::PARAM_INT);
-		$purchaseStm->bindValue(':customer_id', $_SESSION['customer']['id'], PDO::PARAM_INT);
+		$purchaseStm->bindValue(':customer_id', $customerId, PDO::PARAM_INT);
+
 		if ($purchaseStm->execute()) {
 			$detailStm;
 			$detailSql =
-				'INSERT INTO purchase_detail(purchase_id, product_id, count) VALUES(:purchase_id, :product_id, :count);';
+				'INSERT INTO purchase_detail(purchase_id, product_id, count) 
+				VALUES(:purchase_id, :product_id, :count);';
 			foreach ($_SESSION["product"] as $key => $value) {
 				$detailStm = $pdo->prepare($detailSql);
 				$detailStm->bindValue(':purchase_id', $maxId, PDO::PARAM_INT);

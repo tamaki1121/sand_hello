@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
 	<?php
 	require 'menu.php';
 	$name = isset($_POST["name"]) ? htmlspecialchars($_POST["name"]) : false;
@@ -20,7 +19,8 @@
 		$pdo;
 		require 'db_connect.php';
 		try {
-			$sql = "INSERT INTO CUSTOMER (NAME, ADDRESS, LOGIN, PASSWORD) VALUE (:name, :address, :login, :password)";
+			$sql = "
+			INSERT INTO customer (name, address, login, password) VALUE (:name, :address, :login, :password)";
 			$stmt = $pdo->prepare($sql);
 			$stmt->bindValue(':name', $name, PDO::PARAM_STR);
 			$stmt->bindValue(':address', $address, PDO::PARAM_STR);
@@ -33,7 +33,7 @@
 				print("登録に失敗しました<br/>");
 			}
 		} catch (Exception $e) {
-			print("error<br/>");
+			// print("error<br/>");
 			print $e->getMessage() . "<br/>";
 			exit();
 		}
